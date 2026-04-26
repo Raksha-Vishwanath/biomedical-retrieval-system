@@ -37,7 +37,7 @@ export default async function HomePage() {
       }
     >
       <SearchExperience
-        initialQuery={settings.frontend.defaultQuery}
+        initialQuery={settings.frontend.default_query}
         methods={settings.retrievalMethods}
       />
     </SiteShell>
