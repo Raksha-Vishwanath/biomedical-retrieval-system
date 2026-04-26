@@ -1,5 +1,4 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
+import typed from "@/lib/settings.json";
 
 type RawSettings = {
   project: {
@@ -21,18 +20,16 @@ type RawSettings = {
 };
 
 export async function loadSharedSettings() {
-  const filePath = path.join(process.cwd(), "..", "shared", "config", "settings.json");
-  const raw = await readFile(filePath, "utf8");
-  const typed = JSON.parse(raw) as RawSettings;
+  const settings = typed as RawSettings;
 
   return {
     project: {
-      name: typed.project.name,
-      tagline: typed.project.tagline,
-      researchQuestion: typed.project.research_question
+      name: settings.project.name,
+      tagline: settings.project.tagline,
+      researchQuestion: settings.project.research_question
     },
-    retrievalMethods: typed.retrieval_methods,
-    analysisModules: typed.analysis_modules,
-    frontend: typed.frontend
+    retrievalMethods: settings.retrieval_methods,
+    analysisModules: settings.analysis_modules,
+    frontend: settings.frontend
   };
 }
