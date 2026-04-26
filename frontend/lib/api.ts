@@ -158,7 +158,7 @@ async function parseResponse<T>(response: Response): Promise<T> {
 
 export async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    cache: "no-store"
+    next: { revalidate: 3600 }
   });
   return parseResponse<T>(response);
 }
