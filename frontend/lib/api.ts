@@ -1,7 +1,16 @@
-export const API_BASE_URL =
+const SERVER_API_BASE_URL =
+  process.env.BACKEND_API_BASE_URL ??
   process.env.NEXT_PUBLIC_API_BASE_URL ??
   process.env.BIOSEEK_API_BASE_URL ??
   "http://127.0.0.1:8000/api";
+
+const CLIENT_API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ??
+  "/api/proxy";
+
+function getApiBaseUrl() {
+  return typeof window === "undefined" ? SERVER_API_BASE_URL : CLIENT_API_BASE_URL;
+}
 
 export type RetrievedDocument = {
   pmid: string;
@@ -157,14 +166,14 @@ async function parseResponse<T>(response: Response): Promise<T> {
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
     next: { revalidate: 3600 }
   });
   return parseResponse<T>(response);
 }
 
 export async function apiPost<T>(path: string, body: object): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
